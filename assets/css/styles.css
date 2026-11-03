@@ -1,0 +1,1138 @@
+/* ==========================================================================
+   PORTFOLIO CV – styles.css
+   Chiến lược: MOBILE-FIRST
+   - Mặc định (ngoài media query) = giao diện cho màn hình nhỏ nhất (~360px)
+   - @media (min-width: 768px)  → nâng cấp cho tablet
+   - @media (min-width: 1280px) → nâng cấp cho desktop
+   ========================================================================== */
+
+/* ==========================================================================
+   1. DESIGN TOKENS – biến hệ thống thị giác (màu, chữ, khoảng cách, bo góc)
+   Dùng custom properties để thay đổi tập trung, nhất quán toàn trang.
+   ========================================================================== */
+:root {
+  /* --- Bảng màu --- */
+  --color-primary: #2563eb;      /* xanh thương hiệu */
+  --color-primary-dark: #1d4ed8;
+  --color-accent: #7c3aed;       /* tím nhấn */
+  --color-text: #fafcff;         /* chữ chính */
+  --color-text-soft: #fbfdff;    /* chữ phụ */
+  --color-surface: #c6c0c0;      /* nền vùng nhấn */
+  --color-border: #edf0f477;       /* viền */
+  --color-chip: #f8feff;         /* nền chip kỹ năng */
+
+  /* --- Typography --- */
+  --font-base: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --fs-sm: 0.875rem;   /* 14px */
+  --fs-base: 1rem;     /* 16px */
+  --fs-lg: 1.125rem;   /* 18px */
+  --fs-h2: 1.5rem;     /* 24px */
+  --fs-h1: 2rem;       /* 32px (sẽ tăng ở desktop) */
+  --lh-base: 1.6;
+
+  /* --- Khoảng cách (spacing scale) --- */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+
+  /* --- Bố cục --- */
+  --container-max: 1200px;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+/* ==========================================================================
+   2. CHUẨN HÓA BOX MODEL + RESET CƠ BẢN
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;   /* width đã bao gồm padding + border → dễ tính toán */
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;        /* cuộn mượt khi bấm nav */
+  -webkit-text-size-adjust: 100%; /* chống iOS tự phóng chữ */
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-x: hidden; /* LƯỚI AN TOÀN chống cuộn ngang; bố cục bên dưới vẫn tự đúng */
+}
+
+img {
+  display: block;
+  max-width: 100%;  /* ảnh không bao giờ tràn khung → không gây cuộn ngang */
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ==========================================================================
+   3. LAYOUT DÙNG LẠI – .container
+   ========================================================================== */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-2); /* lề ngang an toàn trên mobile */
+}
+
+.section {
+  padding-block: var(--space-5);
+}
+
+.section-muted {
+  background: var(--color-surface);
+}
+
+.section-title {
+  font-size: var(--fs-h2);
+  margin-bottom: var(--space-1);
+}
+
+.section-sub {
+  color: var(--color-text-soft);
+  margin-bottom: var(--space-3);
+}
+
+/* ==========================================================================
+   4. HEADER + NAV (FLEXBOX)
+   Mobile: thương hiệu trên, menu xuống dòng và tự wrap → không tràn ngang.
+   ========================================================================== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;             /* FLEXBOX */
+  flex-wrap: wrap;           /* cho phép xuống dòng trên màn hình hẹp */
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1);
+  padding-block: var(--space-1);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 700;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 800;
+}
+
+/* Danh sách nav cũng là flex container */
+.nav-list {
+  display: flex;            /* FLEXBOX cho thanh điều hướng */
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.nav-list a {
+  display: inline-block;
+  padding: 0.25rem 0.25rem;
+  color: var(--color-text-soft);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.nav-list a:hover,
+.nav-list a:focus-visible {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   5. HERO / GIỚI THIỆU
+   Mobile: xếp dọc (text trên, avatar dưới). Desktop: 2 cột.
+   ========================================================================== */
+.hero {
+  padding-block: var(--space-5);
+  background: linear-gradient(180deg, var(--color-surface), var(--color-bg));
+}
+
+.hero-inner {
+  display: flex;
+  flex-direction: column;     /* mobile-first: xếp dọc */
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+.eyebrow {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--fs-sm);
+}
+
+.hero-title {
+  font-size: var(--fs-h1);
+  line-height: 1.15;
+  margin-block: 0.25rem;
+}
+
+.hero-role {
+  font-size: var(--fs-lg);
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-bottom: var(--space-2);
+}
+
+.hero-desc {
+  color: var(--color-text-soft);
+  max-width: 60ch;
+  margin-bottom: var(--space-3);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.hero-avatar img {
+  border-radius: var(--radius);
+  /* box-shadow: var(--shadow); */
+  width: 100%;
+  /* max-width: 260px; */
+}
+
+/* --- Nút bấm --- */
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-align: center;
+  transition: transform 0.12s, background 0.15s, box-shadow 0.15s;
+}
+
+.btn:active { transform: translateY(1px); }
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--shadow);
+}
+.btn-primary:hover { background: var(--color-primary-dark); }
+
+.btn-outline {
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+.btn-outline:hover { background: var(--color-chip); }
+
+/* ==========================================================================
+   6. KỸ NĂNG – chip tự wrap bằng flex
+   ========================================================================== */
+.skill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.skill-chip {
+  background: var(--color-chip);
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-border);
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   7. DỰ ÁN – CSS GRID cho danh sách thẻ
+   Mobile: 1 cột. Tablet: 2 cột. Desktop: 3 cột.
+   ========================================================================== */
+.project-grid {
+  display: grid;                       /* CSS GRID */
+  grid-template-columns: 1fr;          /* mobile-first: 1 cột */
+  gap: var(--space-3);
+}
+
+.card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;                    /* bo góc gọn cả ảnh */
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+.card-media {
+  width: 100%;
+  aspect-ratio: 5 / 3;                 /* giữ tỉ lệ ảnh ổn định */
+  object-fit: cover;
+}
+
+.card-body {
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;                             /* các thẻ cao bằng nhau trong grid */
+}
+
+.card-title { font-size: var(--fs-lg); }
+
+.card-desc {
+  color: var(--color-text-soft);
+  font-size: var(--fs-sm);
+  flex: 1;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.tag-list li {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-soft);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.card-link {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  margin-top: var(--space-1);
+}
+
+/* ==========================================================================
+   8. LIÊN HỆ
+   ========================================================================== */
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.contact-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: baseline;
+}
+
+.contact-label {
+  min-width: 90px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.contact-list a { color: var(--color-primary); }
+.contact-list a:hover { text-decoration: underline; }
+
+/* ==========================================================================
+   9. FOOTER
+   ========================================================================== */
+.site-footer {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding-block: var(--space-3);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-soft);
+  font-size: var(--fs-sm);
+}
+
+.to-top { color: var(--color-primary); font-weight: 600; }
+
+/* ==========================================================================
+   10. MEDIA QUERIES – nâng cấp theo breakpoint (mobile-first)
+   ========================================================================== */
+
+/* ----- TABLET: ≥ 768px ----- */
+@media (min-width: 768px) {
+  :root {
+    --fs-h1: 2.5rem;   /* 40px */
+    --fs-h2: 1.75rem;  /* 28px */
+  }
+
+  .container { padding-inline: var(--space-3); }
+
+  /* Hero chuyển sang 2 cột */
+  .hero-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .hero-text { flex: 1; }
+  .hero-avatar img { max-width: 300px; }
+
+  /* Lưới dự án: 2 cột */
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- DESKTOP: ≥ 1280px ----- */
+@media (min-width: 1280px) {
+  :root {
+    --fs-h1: 3rem;     /* 48px */
+  }
+
+  /* Lưới dự án: 3 cột */
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero-avatar img { max-width: 340px; }
+}
+/* ==========================================================================
+   12. BỘ ANIMATION PHONG PHÚ & HIỆU ỨNG TƯƠNG TÁC ĐA TẦNG
+   ========================================================================== */
+
+/* --- 12.1. Hệ thống Keyframes --- */
+@keyframes fadeInUpSpring {
+  0% {
+    opacity: 0;
+    transform: translateY(36px) scale(0.96);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slideDownHeader {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes textShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes avatarMorphFloat {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    border-radius: 18px 28px 20px 26px;
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.25), 0 0 0 0 rgba(17, 56, 139, 0.3);
+  }
+  33% {
+    transform: translateY(-12px) rotate(1.5deg);
+    border-radius: 28px 16px 26px 18px;
+    box-shadow: 0 20px 40px rgba(33, 185, 109, 0.35), 0 0 0 8px rgba(124, 58, 237, 0.12);
+  }
+  66% {
+    transform: translateY(-6px) rotate(-1.5deg);
+    border-radius: 20px 26px 16px 28px;
+    box-shadow: 0 16px 35px rgba(214, 13, 30, 0.3), 0 0 0 4px rgba(4, 142, 145, 0.2);
+  }
+}
+
+@keyframes buttonShine {
+  0%   { left: -100%; }
+  25%  { left: 120%; }
+  100% { left: 120%; }
+}
+
+@keyframes chipWave {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+@keyframes bounceUp {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
+}
+
+/* --- 12.2. Header & Thanh điều hướng --- */
+.site-header {
+  animation: slideDownHeader 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.brand-mark {
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.brand:hover .brand-mark {
+  transform: rotate(-12deg) scale(1.15);
+  background: var(--color-accent);
+  box-shadow: 0 0 15px var(--color-accent);
+}
+
+.brand-name {
+  transition: letter-spacing 0.3s ease, color 0.3s ease;
+}
+
+.brand:hover .brand-name {
+  letter-spacing: 0.03em;
+  color: var(--color-primary);
+}
+
+.nav-list a {
+  position: relative;
+  border-bottom: none;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-list a:hover {
+  transform: translateY(-2px);
+}
+
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2.5px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-list a:hover::after,
+.nav-list a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --- 12.3. Khu vực Hero: Nền động, Chữ đổi màu & Ảnh Morphing --- */
+.hero {
+  background: linear-gradient(-45deg, var(--color-surface), var(--color-bg), rgba(124, 58, 237, 0.18), rgba(4, 142, 145, 0.22));
+  background-size: 300% 300%;
+  animation: gradientShift 12s ease infinite;
+}
+
+.hero-text > * {
+  opacity: 0;
+  animation: fadeInUpSpring 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-text .eyebrow      { animation-delay: 0.1s; }
+.hero-text .hero-title   { animation-delay: 0.22s; }
+.hero-text .hero-role    { animation-delay: 0.34s; }
+.hero-text .hero-desc    { animation-delay: 0.46s; }
+.hero-text .hero-actions { animation-delay: 0.58s; }
+
+/* Chữ tiêu đề chạy màu Gradient */
+.hero-title {
+  background: linear-gradient(90deg, var(--color-text), var(--color-accent), var(--color-primary), var(--color-text));
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation:
+    fadeInUpSpring 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards,
+    textShimmer 5s linear infinite;
+}
+
+/* Con trỏ nhấp nháy sau dòng Role */
+.hero-role::after {
+  content: " |";
+  color: var(--color-primary);
+  font-weight: 400;
+  animation: cursorBlink 1s step-end infinite;
+}
+
+/* Ảnh đại diện uốn lượn & nổi 3D */
+.hero-avatar {
+  opacity: 0;
+  animation: fadeInUpSpring 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+.hero-avatar img {
+  animation: avatarMorphFloat 6s ease-in-out infinite;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
+}
+
+.hero-avatar img:hover {
+  transform: scale(1.06) rotate(-2deg) !important;
+  filter: contrast(1.05) saturate(1.1);
+}
+
+/* --- 12.4. Nút bấm (Buttons) với hiệu ứng Quét sáng (Shimmer) --- */
+.btn {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background-color 0.25s ease;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  animation: buttonShine 4s infinite;
+}
+
+.btn:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(17, 56, 139, 0.35);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* --- 12.5. Tiêu đề các phần (Section Titles) --- */
+.section-title {
+  position: relative;
+  display: inline-block;
+}
+
+.section-title::after {
+  content: "";
+  display: block;
+  width: 45%;
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.section:hover .section-title::after {
+  width: 100%;
+}
+
+/* --- 12.6. Thẻ Kỹ năng (Skill Chips) gợn sóng & nảy đàn hồi --- */
+.skill-chip {
+  opacity: 0;
+  animation:
+    fadeInUpSpring 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    chipWave 3.5s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.skill-chip:nth-child(1) { animation-delay: 0.1s, 1.0s; }
+.skill-chip:nth-child(2) { animation-delay: 0.18s, 1.2s; }
+.skill-chip:nth-child(3) { animation-delay: 0.26s, 1.4s; }
+.skill-chip:nth-child(4) { animation-delay: 0.34s, 1.6s; }
+.skill-chip:nth-child(5) { animation-delay: 0.42s, 1.8s; }
+.skill-chip:nth-child(6) { animation-delay: 0.5s, 2.0s; }
+
+.skill-chip:hover {
+  transform: translateY(-7px) scale(1.08) !important;
+  background: var(--color-accent);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4);
+}
+
+/* --- 12.7. Thẻ Dự án (Project Cards) kèm tia sáng lướt qua --- */
+.card {
+  position: relative;
+  opacity: 0;
+  animation: fadeInUpSpring 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+}
+
+.card:nth-child(1) { animation-delay: 0.15s; }
+.card:nth-child(2) { animation-delay: 0.3s; }
+.card:nth-child(3) { animation-delay: 0.45s; }
+.card:nth-child(4) { animation-delay: 0.6s; }
+
+/* Vệt sáng chéo quét qua Card khi hover */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-25deg);
+  z-index: 2;
+  pointer-events: none;
+  transition: left 0.65s ease;
+}
+
+.card:hover::before {
+  left: 140%;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.015);
+  border-color: var(--color-accent);
+  box-shadow: 0 20px 40px rgba(124, 58, 237, 0.28), 0 8px 20px rgba(238, 40, 0, 0.35);
+}
+
+.card-media {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.4s ease;
+}
+
+.card:hover .card-media {
+  transform: scale(1.07);
+  filter: brightness(1.05);
+}
+
+.tag-list li {
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+}
+
+.card:hover .tag-list li {
+  background: var(--color-chip);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease, letter-spacing 0.2s ease;
+}
+
+.card:hover .card-link {
+  transform: translateX(8px);
+  color: var(--color-accent);
+  letter-spacing: 0.02em;
+}
+
+/* --- 12.8. Khu vực Liên hệ & Footer --- */
+.contact-list li {
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.3s ease;
+}
+
+.contact-list li:hover {
+  transform: translateX(10px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.to-top {
+  display: inline-block;
+  animation: bounceUp 2.2s ease-in-out infinite;
+  transition: color 0.2s ease;
+}
+
+.to-top:hover {
+  color: var(--color-accent);
+}
+
+/* --- 12.9. Hiệu ứng xuất hiện khi cuộn trang (Scroll-driven Animations) --- */
+@supports (animation-timeline: view()) {
+  .section-title,
+  .section-sub,
+  .contact-list li {
+    animation: fadeInUpSpring linear both;
+    animation-timeline: view();
+    animation-range: entry 5% cover 22%;
+  }
+}
+/* ==========================================================================
+   11. HỖ TRỢ TIẾP CẬN & ƯA THÍCH NGƯỜI DÙNG
+   ========================================================================== */
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+/* ==========================================================================
+   13. HIỆU ỨNG CÔNG NGHỆ (CYBER / FUTURISTIC TECH UI)
+   ========================================================================== */
+
+/* --- 13.1. Bảng màu Dark Tech & Lưới kỹ thuật số (Cyber Grid) --- */
+:root {
+  --tech-bg: #070b19;
+  --tech-surface: rgba(15, 23, 42, 0.75);
+  --tech-cyan: #00f2fe;
+  --tech-blue: #4facfe;
+  --tech-purple: #b535f6;
+  --tech-border: rgba(0, 242, 254, 0.25);
+  --tech-glow: 0 0 18px rgba(0, 242, 254, 0.45);
+}
+
+body {
+  background-color: var(--tech-bg);
+  color: #e2e8f0;
+  /* Lưới tọa độ công nghệ kết hợp ánh sáng nền */
+  background-image: 
+    radial-gradient(circle at 15% 20%, rgba(181, 53, 246, 0.14) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(0, 242, 254, 0.12) 0%, transparent 40%),
+    linear-gradient(rgba(0, 242, 254, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 254, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+  background-attachment: fixed;
+}
+
+.section-muted,
+.site-footer {
+  background: rgba(10, 15, 32, 0.65);
+  backdrop-filter: blur(10px);
+  border-block: 1px solid var(--tech-border);
+}
+
+.section-sub,
+.hero-desc,
+.card-desc,
+.footer-inner {
+  color: #94a3b8;
+}
+
+/* --- 13.2. Header kính mờ (Glassmorphism) & Viền phát sáng --- */
+.site-header {
+  background: rgba(7, 11, 25, 0.8);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--tech-border);
+  box-shadow: 0 4px 25px rgba(0, 242, 254, 0.08);
+}
+
+.brand-name {
+  color: #f8fafc;
+}
+
+.brand-mark {
+  background: linear-gradient(135deg, var(--tech-cyan), var(--tech-purple));
+  box-shadow: var(--tech-glow);
+}
+
+.nav-list a {
+  color: #cbd5e1;
+}
+
+.nav-list a:hover {
+  color: var(--tech-cyan);
+  text-shadow: 0 0 8px rgba(0, 242, 254, 0.6);
+}
+
+/* --- 13.3. Khu vực Hero: Chữ Neon, Terminal Role & Radar Avatar --- */
+.hero {
+  background: transparent;
+  position: relative;
+}
+
+.eyebrow {
+  color: var(--tech-cyan);
+  text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.eyebrow::before {
+  content: "> ";
+  color: var(--tech-purple);
+}
+
+.hero-title {
+  background: linear-gradient(90deg, #ffffff, var(--tech-cyan), var(--tech-purple), #ffffff);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.25));
+}
+
+.hero-role {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  color: var(--tech-cyan);
+  background: rgba(0, 242, 254, 0.08);
+  border: 1px solid var(--tech-border);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  box-shadow: inset 0 0 10px rgba(0, 242, 254, 0.1);
+}
+
+/* Vòng năng lượng xoay quanh Avatar */
+.hero-avatar {
+  position: relative;
+  padding: 8px;
+}
+
+.hero-avatar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(45deg, var(--tech-cyan), transparent, var(--tech-purple));
+  animation: techSpinGlow 4s linear infinite;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+@keyframes techSpinGlow {
+  0%   { filter: blur(8px) hue-rotate(0deg); }
+  100% { filter: blur(8px) hue-rotate(360deg); }
+}
+
+.hero-avatar img {
+  border: 2px solid var(--tech-cyan);
+  box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+}
+
+/* --- 13.4. Nút bấm Cyber --- */
+.btn-primary {
+  background: linear-gradient(90deg, #0284c7, var(--tech-purple));
+  border: 1px solid var
+@media (prefers-reduced-motion: reduce) {
+  * {
+    /* ==========================================================================
+   12. ANIMATIONS & TRANSITIONS NÂNG CAO
+   ========================================================================== */
+
+/* --- Khai báo Keyframes --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatAvatar {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: var(--shadow);
+  }
+  50% {
+    box-shadow: 0 8px 28px rgba(124, 58, 237, 0.35);
+  }
+}
+
+/* --- Hiệu ứng xuất hiện cho Hero --- */
+.hero-text > * {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.hero-text .eyebrow      { animation-delay: 0.1s; }
+.hero-text .hero-title   { animation-delay: 0.2s; }
+.hero-text .hero-role    { animation-delay: 0.3s; }
+.hero-text .hero-desc    { animation-delay: 0.4s; }
+.hero-text .hero-actions { animation-delay: 0.5s; }
+
+/* --- Hiệu ứng lơ lửng cho Ảnh đại diện --- */
+.hero-avatar {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+}
+
+.hero-avatar img {
+  animation: floatAvatar 4.5s ease-in-out infinite, pulseGlow 4.5s ease-in-out infinite;
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.hero-avatar img:hover {
+  transform: scale(1.03);
+}
+
+/* --- Hiệu ứng Logo & Thanh điều hướng --- */
+.brand-mark {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease;
+}
+
+.brand:hover .brand-mark {
+  transform: rotate(-10deg) scale(1.1);
+  background: var(--color-accent);
+}
+
+.nav-list a {
+  position: relative;
+  border-bottom: none;
+}
+
+.nav-list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-list a:hover::after,
+.nav-list a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* --- Hiệu ứng Nút bấm (Buttons) --- */
+.btn {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.25s ease;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* --- Hiệu ứng Thẻ Kỹ năng (Skill Chips) --- */
+.skill-chip {
+  opacity: 0;
+  animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  cursor: default;
+}
+
+.skill-chip:nth-child(1) { animation-delay: 0.1s; }
+.skill-chip:nth-child(2) { animation-delay: 0.18s; }
+.skill-chip:nth-child(3) { animation-delay: 0.26s; }
+.skill-chip:nth-child(4) { animation-delay: 0.34s; }
+.skill-chip:nth-child(5) { animation-delay: 0.42s; }
+.skill-chip:nth-child(6) { animation-delay: 0.5s; }
+
+.skill-chip:hover {
+  transform: translateY(-4px) scale(1.05);
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(17, 56, 139, 0.3);
+}
+
+/* --- Hiệu ứng Thẻ Dự án (Project Cards) --- */
+.card {
+  opacity: 0;
+  animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card:nth-child(1) { animation-delay: 0.15s; }
+.card:nth-child(2) { animation-delay: 0.3s; }
+.card:nth-child(3) { animation-delay: 0.45s; }
+.card:nth-child(4) { animation-delay: 0.6s; }
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--color-accent);
+  box-shadow: 0 16px 36px rgba(238, 40, 0, 0.45);
+}
+
+.card-media {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.card:hover .card-media {
+  transform: scale(1.06);
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+
+.card:hover .card-link {
+  transform: translateX(6px);
+  color: var(--color-accent);
+}
+
+/* --- Hiệu ứng Nút Lên đầu trang --- */
+.to-top {
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+}
+
+.to-top:hover {
+  transform: translateY(-4px);
+  color: var(--color-accent);
+}
+@supports (animation-timeline: view()) {
+  .section-title,
+  .section-sub,
+  .card,
+  .skill-chip,
+  .contact-list li {
+    animation: fadeInUp linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 25%;
+  }
+}
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
