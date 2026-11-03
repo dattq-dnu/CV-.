@@ -156,27 +156,67 @@
       </div>
     </section>
    <!-- ----- SECTION: Liên hệ ----- -->
+   
+      
+      <!-- ----- SECTION: Liên hệ ----- -->
     <section id="contact" class="section">
-      <div class="container contact-inner">
+      <div class="container">
         <h2 class="section-title">Liên hệ</h2>
-        <p class="section-sub">Mở cho các cơ hội thực tập &amp; việc làm Frontend.</p>
-        <ul class="contact-list">
-          <li>
-            <span class="contact-label">Email</span>
-            <a href="mailto:tranquocdat@gmail.com">tranquocdat@gmail.com</a>
-          </li>
-          <li>
-            <span class="contact-label">GitHub</span>
-            <a href="https://github.com/dattq-dnu" target="_blank" rel="noopener noreferrer">https://github.com/dattq-dnu</a>
-          </li>
-          <li>
-            <span class="contact-label">TikTok</span>
-            <a href="https://www.tiktok.com/@tqd_66208" target="_blank" rel="noopener noreferrer">https://www.tiktok.com/@tqd_66208</a>
-          </li>
-        </ul>
+        <p class="section-sub">Mở cho các cơ hội thực tập, việc làm Frontend hoặc trao đổi dự án.</p>
+
+        <div class="contact-wrapper">
+          <!-- Cột trái: Thông tin liên hệ trực tiếp -->
+          <div class="contact-info">
+            <h3 class="contact-heading">Kết nối trực tiếp</h3>
+            <p class="contact-text">
+              Bạn có thể liên hệ nhanh qua các kênh dưới đây hoặc để lại lời nhắn bên cạnh, tôi sẽ phản hồi sớm nhất có thể!
+            </p>
+            <ul class="contact-list">
+              <li>
+                <span class="contact-label">Email</span>
+                <a href="mailto:tranquocdat@gmail.com">tranquocdat@gmail.com</a>
+              </li>
+              <li>
+                <span class="contact-label">GitHub</span>
+                <a href="https://github.com/dattq-dnu" target="_blank" rel="noopener noreferrer">github.com/dattq-dnu</a>
+              </li>
+              <li>
+                <span class="contact-label">TikTok</span>
+                <a href="https://www.tiktok.com/@tqd_66208" target="_blank" rel="noopener noreferrer">@tqd_66208</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Cột phải: Form gửi tin nhắn -->
+          <form class="contact-form" action="#" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="fullName">Họ và tên <span aria-hidden="true">*</span></label>
+                <input type="text" id="fullName" name="fullName" placeholder="NHẬP TÊN BẠN" required />
+              </div>
+              <div class="form-group">
+                <label for="email">Email <span aria-hidden="true">*</span></label>
+                <input type="email" id="email" name="email" placeholder="NHẬP EMAIL" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Tiêu đề</label>
+              <input type="text" id="subject" name="subject" placeholder="Lời mời hợp tác / Thực tập Frontend..." />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Nội dung tin nhắn <span aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" rows="4" placeholder="Nhập nội dung tin nhắn của bạn tại đây..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-submit">
+              Gửi tin nhắn →
+            </button>
+          </form>
+        </div>
       </div>
     </section>
-  </main>
   <!-- ========================================================== -->
   <!-- FOOTER                                                      -->
   <!-- ========================================================== -->
